@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* main{
+	background-color: #0072b1;
+} */
 .btn-xxl,
 .btn-wide {
 	padding-right: 45px;
