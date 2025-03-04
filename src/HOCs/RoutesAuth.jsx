@@ -5,7 +5,7 @@ import { Route, Navigate } from 'react-router-dom';
 const RoutesAuth = (route) => {
 
   const loggedIn = useSelector((state) => state.auth.loggedIn);
-  console.log(loggedIn)
+  // console.log(loggedIn)
 
   return <Route path={route.path} key={route.key} element={route.element} />;
 
