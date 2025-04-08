@@ -4,10 +4,10 @@ import AuthLayout from "../layout/AuthLayout";
 import NewServiceForm from "../components/NewServiceForm";
 import EditServicePrice from "../components/EditServicePrice";
 import NewVeterinarian from "../components/NewVeterinarian";
-import DeleteVeterinarian from "../components/DeleteVaterinarian";
+import EditVeterinarian from "../components/EditVeterinarian";
 
 const AdminPanel = () => {
-  const [formSelected, setFormSelected] = useState("");
+  const [formSelected, setFormSelected] = useState("editVet");
 
   const toogleOpenForm = (form) => {
 
@@ -103,7 +103,7 @@ const AdminPanel = () => {
             </section>
             <section className="w-full">
               {formSelected === "createVet" && <NewVeterinarian />}
-              {formSelected === "editVet" && <DeleteVeterinarian />}
+              {formSelected === "editVet" && <EditVeterinarian />}
               {formSelected === "createServ" && <NewServiceForm />}
               {formSelected === "editServ" && <EditServicePrice />}
             </section>
