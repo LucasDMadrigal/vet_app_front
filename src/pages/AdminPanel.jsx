@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import AuthLayout from "../layout/AuthLayout";
 import NewServiceForm from "../components/NewServiceForm";
-import EditServicePrice from "../components/EditServicePrice";
+import EditOffering from "../components/EditOffering";
 import NewVeterinarian from "../components/NewVeterinarian";
 import EditVeterinarian from "../components/EditVeterinarian";
 
 const AdminPanel = () => {
-  const [formSelected, setFormSelected] = useState("editVet");
+  const [formSelected, setFormSelected] = useState("editServ");
 
   const toogleOpenForm = (form) => {
 
@@ -105,7 +105,7 @@ const AdminPanel = () => {
               {formSelected === "createVet" && <NewVeterinarian />}
               {formSelected === "editVet" && <EditVeterinarian />}
               {formSelected === "createServ" && <NewServiceForm />}
-              {formSelected === "editServ" && <EditServicePrice />}
+              {formSelected === "editServ" && <EditOffering />}
             </section>
           </div>
         </main>
