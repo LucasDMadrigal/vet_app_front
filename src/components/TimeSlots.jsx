@@ -105,7 +105,7 @@ const TimeSlots = ({ timeSlots }) => {
     { day: "SUNDAY", hour: "06:00 PM" },
   ];
 
-  // if (timeSlots.length) {
+  // if (allSlots.length) {
   // }
   const mondaySlots = allSlots.filter((slot) => slot.day === "MONDAY");
   const tuesdaySlots = allSlots.filter((slot) => slot.day === "TUESDAY");
@@ -122,14 +122,15 @@ const TimeSlots = ({ timeSlots }) => {
   return (
     <div className="my-4 py-4 timeslots-main--container">
       <h3 className="text-lg font-bold mb-4">Turnos disponibles</h3>
-      <div className="flex gap-1 justify-start">
+      <div className="flex justify-around	">
         <div className="flex flex-col	gap-1 justify-start">
           <h3 className="text-lg font-bold mb-4">Domingo</h3>
           {allSundaySlots.map((slot, index) => (
             <button
-              className={`flex-none inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm 
-            font-medium hover:text-white text-indigo-700 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
-            focus:ring-indigo-500 buton--timeslot ${slotActive(slot.hour, sundaySlots)? "bg-indigo-600 text-white": ""} ${timeSlots ? "" : "bg-red-700"}`}
+              className={`flex-none inline-flex items-center px-4 py-2 border border-transparent rounded-md  text-sm 
+            font-medium text-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
+            focus:ring-indigo-500 buton--timeslot ${slotActive(slot.hour, sundaySlots)? "bg-indigo-600 text-white": ""}
+            ${allSlots.length ? "shadow-sm hover:text-white hover:bg-indigo-700" : "text-gray-400"}  `}
               key={index}
             >
               {slot.hour}
@@ -140,9 +141,10 @@ const TimeSlots = ({ timeSlots }) => {
           <h3 className="text-lg font-bold mb-4">Lunes</h3>
           {allMondaySlots.map((slot, index) => (
             <button
-              className={`flex-none inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm 
-          font-medium hover:text-white text-indigo-700 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
-          focus:ring-indigo-500 buton--timeslot ${slotActive(slot.hour, mondaySlots) ? "bg-indigo-600 text-white" : ""} ${timeSlots ? "" : "bg-red-700"}`}
+              className={`flex-none inline-flex items-center px-4 py-2 border border-transparent rounded-md  text-sm 
+          font-medium  text-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
+          focus:ring-indigo-500 buton--timeslot ${slotActive(slot.hour, mondaySlots) ? "bg-indigo-600 text-white" : ""}
+          ${allSlots.length ? "shadow-sm hover:text-white hover:bg-indigo-700" : "text-gray-400"}`}
               key={index}
             >
               {slot.hour}
@@ -153,9 +155,10 @@ const TimeSlots = ({ timeSlots }) => {
           <h3 className="text-lg font-bold mb-4">Martes</h3>
           {allTuesdaySlots.map((slot, index) => (
             <button
-              className={`flex-none inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm 
-            font-medium hover:text-white text-indigo-700 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
-            focus:ring-indigo-500 buton--timeslot ${slotActive(slot.hour, tuesdaySlots)? "bg-indigo-600 text-white": ""} ${timeSlots ? "" : "bg-red-700"}`}
+              className={`flex-none inline-flex items-center px-4 py-2 border border-transparent rounded-md  text-sm 
+            font-medium text-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
+            focus:ring-indigo-500 buton--timeslot ${slotActive(slot.hour, tuesdaySlots)? "bg-indigo-600 text-white": ""}
+            ${allSlots.length ? "shadow-sm hover:text-white hover:bg-indigo-700" : "text-gray-400"} `}
               key={index}
             >
               {slot.hour}
@@ -166,9 +169,10 @@ const TimeSlots = ({ timeSlots }) => {
           <h3 className="text-lg font-bold mb-4">Miercoles</h3>
           {allWednesdaySlots.map((slot, index) => (
             <button
-              className={`flex-none inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm 
-            font-medium hover:text-white text-indigo-700 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
-            focus:ring-indigo-500 buton--timeslot ${slotActive(slot.hour, wednesdaySlots)? "bg-indigo-600 text-white": ""} ${timeSlots ? "" : "bg-red-700"}`}
+              className={`flex-none inline-flex items-center px-4 py-2 border border-transparent rounded-md  text-sm 
+            font-medium text-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
+            focus:ring-indigo-500 buton--timeslot ${slotActive(slot.hour, wednesdaySlots)? "bg-indigo-600 text-white": ""}
+            ${allSlots.length ? "shadow-sm hover:text-white hover:bg-indigo-700" : "text-gray-400"} `}
               key={index}
             >
               {slot.hour}
@@ -179,9 +183,10 @@ const TimeSlots = ({ timeSlots }) => {
           <h3 className="text-lg font-bold mb-4">Jueves</h3>
           {allThursdaySlots.map((slot, index) => (
             <button
-              className={`flex-none inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm 
-            font-medium hover:text-white text-indigo-700 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
-            focus:ring-indigo-500 buton--timeslot ${slotActive(slot.hour, thursdaySlots)? "bg-indigo-600 text-white": ""} ${timeSlots ? "" : "bg-red-700"}`}
+              className={`flex-none inline-flex items-center px-4 py-2 border border-transparent rounded-md  text-sm 
+            font-medium text-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
+            focus:ring-indigo-500 buton--timeslot ${slotActive(slot.hour, thursdaySlots)? "bg-indigo-600 text-white": ""}
+            ${allSlots.length ? "shadow-sm hover:text-white hover:bg-indigo-700" : "text-gray-400"}  `}
               key={index}
             >
               {slot.hour}
@@ -192,9 +197,10 @@ const TimeSlots = ({ timeSlots }) => {
           <h3 className="text-lg font-bold mb-4">Viernes</h3>
           {allFridaySlots.map((slot, index) => (
             <button
-              className={`flex-none inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm 
-            font-medium hover:text-white text-indigo-700 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
-            focus:ring-indigo-500 buton--timeslot ${slotActive(slot.hour, fridaySlots)? "bg-indigo-600 text-white": ""} ${timeSlots ? "" : "bg-red-700"}`}
+              className={`flex-none inline-flex items-center px-4 py-2 border border-transparent rounded-md  text-sm 
+            font-medium text-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
+            focus:ring-indigo-500 buton--timeslot ${slotActive(slot.hour, fridaySlots)? "bg-indigo-600 text-white": ""}
+            ${allSlots.length ? "shadow-sm hover:text-white hover:bg-indigo-700" : "text-gray-400"}  `}
               key={index}
             >
               {slot.hour}
@@ -205,9 +211,10 @@ const TimeSlots = ({ timeSlots }) => {
           <h3 className="text-lg font-bold mb-4">Sabado</h3>
           {allSaturdaySlots.map((slot, index) => (
             <button
-              className={`flex-none inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm 
-            font-medium hover:text-white text-indigo-700 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
-            focus:ring-indigo-500 buton--timeslot ${slotActive(slot.hour, saturdaySlots)? "bg-indigo-600 text-white": ""} ${timeSlots ? "" : "bg-red-700"}`}
+              className={`flex-none inline-flex items-center px-4 py-2 border border-transparent rounded-md  text-sm 
+            font-medium text-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
+            focus:ring-indigo-500 buton--timeslot ${slotActive(slot.hour, saturdaySlots)? "bg-indigo-600 text-white": ""}
+            ${allSlots.length ? "shadow-sm hover:text-white hover:bg-indigo-700" : "text-gray-400"}  `}
               key={index}
             >
               {slot.hour}
