@@ -1,21 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/TimeSlots.css";
 
-const TimeSlots = () => {
-  const timeSlots = [
-    {
-      day: "MONDAY",
-      hour: "09:00 AM",
-    },
-    {
-      day: "MONDAY",
-      hour: "11:00 AM",
-    },
-    {
-      day: "WEDNESDAY",
-      hour: "02:00 PM",
-    },
-  ];
+const TimeSlots = ({ timeSlots }) => {
+  const [allSlots, setAllSlots] = useState([]);
+  useEffect(() => {
+    setAllSlots(timeSlots);
+  }, [timeSlots]);
 
   const allMondaySlots = [
     { day: "MONDAY", hour: "08:00 AM" },
@@ -115,112 +105,116 @@ const TimeSlots = () => {
     { day: "SUNDAY", hour: "06:00 PM" },
   ];
 
-  const allTimeSlots = [
-    ...allMondaySlots,
-    ...allTuesdaySlots,
-    ...allWednesdaySlots,
-    ...allThursdaySlots,
-    ...allFridaySlots,
-    ...allSaturdaySlots,
-    ...allSundaySlots,
-  ];
+  // if (timeSlots.length) {
+  // }
+  const mondaySlots = allSlots.filter((slot) => slot.day === "MONDAY");
+  const tuesdaySlots = allSlots.filter((slot) => slot.day === "TUESDAY");
+  const wednesdaySlots = allSlots.filter((slot) => slot.day === "WEDNESDAY");
+  const thursdaySlots = allSlots.filter((slot) => slot.day === "THURSDAY");
+  const fridaySlots = allSlots.filter((slot) => slot.day === "FRIDAY");
+  const saturdaySlots = allSlots.filter((slot) => slot.day === "SATURDAY");
+  const sundaySlots = allSlots.filter((slot) => slot.day === "SUNDAY");
 
-  const mondaySlots = timeSlots.filter((slot) => slot.day === "MONDAY");
-  const tuesdaySlots = timeSlots.filter((slot) => slot.day === "TUESDAY");
-  const wednesdaySlots = timeSlots.filter((slot) => slot.day === "WEDNESDAY");
-  const thursdaySlots = timeSlots.filter((slot) => slot.day === "THURSDAY");
-  const fridaySlots = timeSlots.filter((slot) => slot.day === "FRIDAY");
-  const saturdaySlots = timeSlots.filter((slot) => slot.day === "SATURDAY");
-  const sundaySlots = timeSlots.filter((slot) => slot.day === "SUNDAY");
+  const slotActive = (slotHour, slotArray) => {
+    const exist = slotArray.some((slot) => slot.hour == slotHour);
+    return exist;
+  };
   return (
     <div className="my-4 py-4 timeslots-main--container">
       <h3 className="text-lg font-bold mb-4">Turnos disponibles</h3>
       <div className="flex gap-1 justify-start">
-      <div className="flex flex-col	gap-1 justify-start">
-      <h3 className="text-lg font-bold mb-4">Lunes</h3>
-        {allMondaySlots.map((slot, index) => (
-          // <button
-          <button
-            className="flex-none inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 buton--timeslot"
-            key={index}
-          >
-            {slot.hour}
-          </button>
-        ))}
+        <div className="flex flex-col	gap-1 justify-start">
+          <h3 className="text-lg font-bold mb-4">Domingo</h3>
+          {allSundaySlots.map((slot, index) => (
+            <button
+              className={`flex-none inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm 
+            font-medium hover:text-white text-indigo-700 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
+            focus:ring-indigo-500 buton--timeslot ${slotActive(slot.hour, sundaySlots)? "bg-indigo-600 text-white": ""} ${timeSlots ? "" : "bg-red-700"}`}
+              key={index}
+            >
+              {slot.hour}
+            </button>
+          ))}
+        </div>
+        <div className="flex flex-col	gap-1 justify-start">
+          <h3 className="text-lg font-bold mb-4">Lunes</h3>
+          {allMondaySlots.map((slot, index) => (
+            <button
+              className={`flex-none inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm 
+          font-medium hover:text-white text-indigo-700 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
+          focus:ring-indigo-500 buton--timeslot ${slotActive(slot.hour, mondaySlots) ? "bg-indigo-600 text-white" : ""} ${timeSlots ? "" : "bg-red-700"}`}
+              key={index}
+            >
+              {slot.hour}
+            </button>
+          ))}
+        </div>
+        <div className="flex flex-col	gap-1 justify-start">
+          <h3 className="text-lg font-bold mb-4">Martes</h3>
+          {allTuesdaySlots.map((slot, index) => (
+            <button
+              className={`flex-none inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm 
+            font-medium hover:text-white text-indigo-700 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
+            focus:ring-indigo-500 buton--timeslot ${slotActive(slot.hour, tuesdaySlots)? "bg-indigo-600 text-white": ""} ${timeSlots ? "" : "bg-red-700"}`}
+              key={index}
+            >
+              {slot.hour}
+            </button>
+          ))}
+        </div>
+        <div className="flex flex-col	gap-1 justify-start">
+          <h3 className="text-lg font-bold mb-4">Miercoles</h3>
+          {allWednesdaySlots.map((slot, index) => (
+            <button
+              className={`flex-none inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm 
+            font-medium hover:text-white text-indigo-700 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
+            focus:ring-indigo-500 buton--timeslot ${slotActive(slot.hour, wednesdaySlots)? "bg-indigo-600 text-white": ""} ${timeSlots ? "" : "bg-red-700"}`}
+              key={index}
+            >
+              {slot.hour}
+            </button>
+          ))}
+        </div>
+        <div className="flex flex-col	gap-1 justify-start">
+          <h3 className="text-lg font-bold mb-4">Jueves</h3>
+          {allThursdaySlots.map((slot, index) => (
+            <button
+              className={`flex-none inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm 
+            font-medium hover:text-white text-indigo-700 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
+            focus:ring-indigo-500 buton--timeslot ${slotActive(slot.hour, thursdaySlots)? "bg-indigo-600 text-white": ""} ${timeSlots ? "" : "bg-red-700"}`}
+              key={index}
+            >
+              {slot.hour}
+            </button>
+          ))}
+        </div>
+        <div className="flex flex-col	gap-1 justify-start">
+          <h3 className="text-lg font-bold mb-4">Viernes</h3>
+          {allFridaySlots.map((slot, index) => (
+            <button
+              className={`flex-none inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm 
+            font-medium hover:text-white text-indigo-700 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
+            focus:ring-indigo-500 buton--timeslot ${slotActive(slot.hour, fridaySlots)? "bg-indigo-600 text-white": ""} ${timeSlots ? "" : "bg-red-700"}`}
+              key={index}
+            >
+              {slot.hour}
+            </button>
+          ))}
+        </div>
+        <div className="flex flex-col	gap-1 justify-start">
+          <h3 className="text-lg font-bold mb-4">Sabado</h3>
+          {allSaturdaySlots.map((slot, index) => (
+            <button
+              className={`flex-none inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm 
+            font-medium hover:text-white text-indigo-700 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
+            focus:ring-indigo-500 buton--timeslot ${slotActive(slot.hour, saturdaySlots)? "bg-indigo-600 text-white": ""} ${timeSlots ? "" : "bg-red-700"}`}
+              key={index}
+            >
+              {slot.hour}
+            </button>
+          ))}
+        </div>
       </div>
-      <div className="flex flex-col	gap-1 justify-start">
-      <h3 className="text-lg font-bold mb-4">Lunes</h3>
-        {allMondaySlots.map((slot, index) => (
-          // <button
-          <button
-            className="flex-none inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 buton--timeslot"
-            key={index}
-          >
-            {slot.hour}
-          </button>
-        ))}
-      </div>
-      <div className="flex flex-col	gap-1 justify-start">
-      <h3 className="text-lg font-bold mb-4">Lunes</h3>
-        {allMondaySlots.map((slot, index) => (
-          // <button
-          <button
-            className="flex-none inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 buton--timeslot"
-            key={index}
-          >
-            {slot.hour}
-          </button>
-        ))}
-      </div>
-      <div className="flex flex-col	gap-1 justify-start">
-      <h3 className="text-lg font-bold mb-4">Lunes</h3>
-        {allMondaySlots.map((slot, index) => (
-          // <button
-          <button
-            className="flex-none inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 buton--timeslot"
-            key={index}
-          >
-            {slot.hour}
-          </button>
-        ))}
-      </div>
-      <div className="flex flex-col	gap-1 justify-start">
-      <h3 className="text-lg font-bold mb-4">Lunes</h3>
-        {allMondaySlots.map((slot, index) => (
-          // <button
-          <button
-            className="flex-none inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 buton--timeslot"
-            key={index}
-          >
-            {slot.hour}
-          </button>
-        ))}
-      </div>
-      <div className="flex flex-col	gap-1 justify-start">
-      <h3 className="text-lg font-bold mb-4">Lunes</h3>
-        {allMondaySlots.map((slot, index) => (
-          // <button
-          <button
-            className="flex-none inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 buton--timeslot"
-            key={index}
-          >
-            {slot.hour}
-          </button>
-        ))}
-      </div>
-      <div className="flex flex-col	gap-1 justify-start">
-      <h3 className="text-lg font-bold mb-4">Lunes</h3>
-        {allMondaySlots.map((slot, index) => (
-          // <button
-          <button
-            className="flex-none inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 buton--timeslot"
-            key={index}
-          >
-            {slot.hour}
-          </button>
-        ))}
-      </div>
-    </div>
     </div>
   );
 };

@@ -12,7 +12,8 @@ const EditOffering = () => {
   // const token = useSelector((store) => store.auth.token);
 
   const [services, setServices] = useState([]);
-  const [selectedServiceId, setSelectedServiceId] = useState(null);
+  const [selectedServiceId, setSelectedServiceId] = useState("");
+  const [selectedService, setSelectedService] = useState(null);
   const [price, setPrice] = useState("");
   const [active, setActive] = useState();
   const [loading, setLoading] = useState(true);
@@ -55,16 +56,17 @@ const EditOffering = () => {
   const handleServiceChange = (e) => {
     const selectedId = e.target.value;
     setSelectedServiceId(selectedId);
-    const selectedService = services.find(
+    const service = services.find(
       (service) => service.id === parseInt(selectedId)
     );
-    console.log("🚀 ~ handleServiceChange ~ selectedService:", selectedService)
-    // setPrice(selectedService.price);
-    setName(selectedService.name);
-    setDescription(selectedService.description);
-    setImage(selectedService.image);
-    setPrice(selectedService.price);
-    setActive(selectedService.active);
+    setSelectedService(service);
+    console.log("🚀 ~ handleServiceChange ~ service:", service)
+    // setPrice(service.price);
+    setName(service.name);
+    setDescription(service.description);
+    setImage(service.image);
+    setPrice(service.price);
+    setActive(service.active);
   };
 
   const handlePriceChange = (e) => {
@@ -166,6 +168,7 @@ const EditOffering = () => {
         <textarea
           id="description"
           name="description"
+          disabled={selectedServiceId == "" ? true : false}
           value={formData.description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Enter service description"
@@ -182,7 +185,7 @@ const EditOffering = () => {
           Price:
         </label>
         <input
-        disabled={selectedServiceId ? true : false}
+        disabled={selectedServiceId == "" ? true : false}
           type="number"
           id="price"
           name="price"
@@ -196,6 +199,7 @@ const EditOffering = () => {
       <FormGroup>
         <Label for="exampleFile">File</Label>
         <Input
+         disabled={selectedServiceId == "" ? true : false}
           id="exampleFile"
           name="file"
           type="file"
@@ -209,9 +213,11 @@ const EditOffering = () => {
         <FormText>Only *.jpeg and *.png images will be accepted</FormText>
       </FormGroup>
       <input
-      disabled={selectedServiceId ? true : false} type="radio" value={active} checked={active} onClick={() => setActive(!active)} name="active" id="active"/>
+       disabled={selectedServiceId == "" ? true : false} type="radio" value={active} checked={active} onClick={() => setActive(!active)} name="active" id="active"/>
       <label htmlFor="active">Activo</label>
-        <TimeSlots />
+        <TimeSlots 
+        timeSlots={selectedService ? selectedService.timeSlots : []}
+         />
       <div className="flex justify-end">
         <button
           type="submit"
