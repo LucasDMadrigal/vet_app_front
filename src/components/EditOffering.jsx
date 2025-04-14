@@ -3,6 +3,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import { FormGroup, FormText, Input, Label } from "reactstrap";
+import TimeSlots from "./TimeSlots";
 
 const EditOffering = () => {
   const [name, setName] = useState("");
@@ -210,6 +211,7 @@ const EditOffering = () => {
       <input
       disabled={selectedServiceId ? true : false} type="radio" value={active} checked={active} onClick={() => setActive(!active)} name="active" id="active"/>
       <label htmlFor="active">Activo</label>
+        <TimeSlots />
       <div className="flex justify-end">
         <button
           type="submit"

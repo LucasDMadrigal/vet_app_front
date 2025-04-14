@@ -1,4 +1,3 @@
-import './App.css'
 import Home from './pages/Home'
 import { BrowserRouter } from 'react-router-dom'
 import { Routes, Route } from 'react-router-dom'
@@ -12,6 +11,7 @@ import RoutesAuth from './HOCs/RoutesAuth'
 import RoutesNoAuth from './HOCs/RoutesNoAuth'
 import AdminPanel from './pages/AdminPanel'
 import RoutesAuthAdmin from './HOCs/RoutesAuthAdmin'
+import './styles/App.css'
 
 const routesAuth = [
   {
