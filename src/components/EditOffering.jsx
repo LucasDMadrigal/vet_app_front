@@ -27,9 +27,8 @@ const EditOffering = () => {
     price,
     image,
     active,
-    timeSlots
+    timeSlots,
   };
-
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -44,8 +43,6 @@ const EditOffering = () => {
         );
 
         setServices(response.data);
-
-        
       } catch (error) {
         console.error("Error fetching services:", error);
       } finally {
@@ -58,7 +55,7 @@ const EditOffering = () => {
 
   const handleServiceChange = (e) => {
     const selectedId = e.target.value;
-    setSelectedServiceId(selectedId);
+    setSelectedServiceId(e.target.value);
     const service = services.find(
       (service) => service.id === parseInt(selectedId)
     );
@@ -96,7 +93,7 @@ const EditOffering = () => {
       );
       Swal.fire({
         title: "Success",
-        text: "Service updated successfully",
+        text: `${response.data ? response.data : "Service updated successfully"}`,
         icon: "success",
         confirmButtonText: "Ok",
       });
@@ -132,7 +129,7 @@ const EditOffering = () => {
 
   return (
     <form
-      onSubmit={handleSubmit}
+      // onSubmit={handleSubmit}
       className="mt-4 p-4 border border-gray-300 rounded-lg shadow-md w-full mb-14"
     >
       <h3 className="text-lg font-bold mb-4">Create a new Service</h3>
@@ -150,9 +147,9 @@ const EditOffering = () => {
           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           required
         >
-            <option value="" disabled selected>
-              Select a service
-            </option>
+          <option value="" disabled selected>
+            Select a service
+          </option>
           {services.map((service) => (
             <option key={service.id} value={service.id}>
               {service.name}
@@ -187,7 +184,7 @@ const EditOffering = () => {
           Name:
         </label>
         <input
-        disabled={selectedServiceId == "" ? true : false}
+          disabled={selectedServiceId == "" ? true : false}
           type="text"
           id="name"
           name="name"
@@ -206,7 +203,7 @@ const EditOffering = () => {
           Price:
         </label>
         <input
-        disabled={selectedServiceId == "" ? true : false}
+          disabled={selectedServiceId == "" ? true : false}
           type="number"
           id="price"
           name="price"
@@ -220,7 +217,7 @@ const EditOffering = () => {
       <FormGroup>
         <Label for="exampleFile">File</Label>
         <Input
-         disabled={selectedServiceId == "" ? true : false}
+          disabled={selectedServiceId == "" ? true : false}
           id="exampleFile"
           name="file"
           type="file"
@@ -234,17 +231,23 @@ const EditOffering = () => {
         <FormText>Only *.jpeg and *.png images will be accepted</FormText>
       </FormGroup>
       <input
-       disabled={selectedServiceId == "" ? true : false} type="radio" value={active} checked={active} onClick={() => setActive(!active)} name="active" id="active"/>
+        disabled={selectedServiceId == "" ? true : false}
+        type="radio"
+        value={active}
+        checked={active}
+        onClick={() => setActive(!active)}
+        name="active"
+        id="active"
+      />
       <label htmlFor="active">Activo</label>
-        <TimeSlots 
-        timeSlots={selectedService ? timeSlots : []}
-         />
+      <TimeSlots setSelectedTimeSlots={setTimeSlots} timeSlots={timeSlots} />
       <div className="flex justify-end">
         <button
-          type="submit"
+          type="button"
+          onClick={handleSubmit}
           className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
-         Guardar Cambios
+          Guardar Cambios
         </button>
       </div>
     </form>

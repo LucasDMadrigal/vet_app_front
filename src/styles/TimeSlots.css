@@ -5,3 +5,7 @@
 .buton--timeslot{
     width: 6.9rem;
 }
+
+button:not(:disabled) {
+    cursor: auto;
+}
