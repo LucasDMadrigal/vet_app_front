@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/TimeSlots.css";
 
-const TimeSlots = ({ timeSlots, setSelectedTimeSlots }) => {
+const TimeSlots = ({disabledSlots, timeSlots, setSelectedTimeSlots }) => {
   const daysOfWeek = [
     "SUNDAY",
     "MONDAY",
@@ -50,12 +50,12 @@ const TimeSlots = ({ timeSlots, setSelectedTimeSlots }) => {
           <button
             key={index}
             type="button"
-            disabled={!timeSlots.length}
+            disabled={disabledSlots}
             onClick={() => handleToggleSlot(slot)}
             className={`flex-none inline-flex items-center px-4 py-2 border border-transparent rounded-md text-sm font-medium 
               focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 buton--timeslot
               ${isSlotActive(slot) ? "bg-indigo-600 text-white" : ""}
-              ${timeSlots.length ? "text-indigo-700 shadow-sm hover:text-white hover:bg-indigo-700" : "text-gray-400"}`}
+              ${!disabledSlots ? "text-indigo-700 shadow-sm hover:text-white hover:bg-indigo-700" : "text-gray-400"}`}
           >
             {slot.hour}
           </button>

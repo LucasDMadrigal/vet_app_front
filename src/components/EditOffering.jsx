@@ -51,7 +51,11 @@ const EditOffering = () => {
 
   useEffect(() => {
     fetchServices();
-  }, [token]);
+
+    return () => {
+      setSelectedServiceId("");
+    };
+  }, []);
 
   const handleServiceChange = (e) => {
     const selectedId = e.target.value;
@@ -243,7 +247,7 @@ const EditOffering = () => {
         id="active"
       />
       <label htmlFor="active">Activo</label>
-      <TimeSlots setSelectedTimeSlots={setTimeSlots} timeSlots={timeSlots} />
+      <TimeSlots disabledSlots={selectedServiceId == "" ? true : false} setSelectedTimeSlots={setTimeSlots} timeSlots={timeSlots} />
       <div className="flex justify-end">
         <button
           type="button"
