@@ -29,27 +29,27 @@ const EditOffering = () => {
     active,
     timeSlots,
   };
+  
+  const fetchServices = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/api-veterinary/offerings/",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setServices(response.data);
+    } catch (error) {
+      console.error("Error fetching services:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:8080/api-veterinary/offerings/",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        setServices(response.data);
-      } catch (error) {
-        console.error("Error fetching services:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchServices();
   }, [token]);
 
@@ -96,6 +96,9 @@ const EditOffering = () => {
         text: `${response.data ? response.data : "Service updated successfully"}`,
         icon: "success",
         confirmButtonText: "Ok",
+      }).then(() => {
+        // window.location.reload();
+        fetchServices();
       });
     } catch (error) {
       Swal.fire({
@@ -106,7 +109,7 @@ const EditOffering = () => {
       });
     }
   };
-
+  
   const uploadImage = async (event) => {
     const files = event.target.files;
     const data = new FormData();
@@ -129,7 +132,7 @@ const EditOffering = () => {
 
   return (
     <form
-      // onSubmit={handleSubmit}
+      onSubmit={handleSubmit}
       className="mt-4 p-4 border border-gray-300 rounded-lg shadow-md w-full mb-14"
     >
       <h3 className="text-lg font-bold mb-4">Create a new Service</h3>
