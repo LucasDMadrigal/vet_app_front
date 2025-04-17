@@ -5,33 +5,26 @@ import Swal from "sweetalert2";
 import { FormGroup, Label, Input, FormText } from "reactstrap";
 
 const NewVeterinarian = () => {
-  const [name, setName] = useState("");
-  const [specialty, setSpecialty] = useState("");
-  const [address, setAddress] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
   const [image, setImage] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const [newVeterinarian, setNewVeterinarian] = useState({
+    name: "",
+    specialty: "",
+    address: "",
+    phone: "",
+    email: "",
+    image: "",
+  });
   const token = useSelector((state) => state.auth.token);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const veterinarianData = {
-      name,
-      specialty,
-      address,
-      phone,
-      email,
-      image,
-    };
-
     try {
-      console.log(veterinarianData);
       const response = await axios.post(
-        "http://localhost:8080/api-veterinarian/veterinarians/new",
-        veterinarianData,
+        "http://localhost:8080/api-veterinary/veterinarian/new",
+        newVeterinarian,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -45,7 +38,17 @@ const NewVeterinarian = () => {
         text: "Veterinario creado con exito",
         icon: "success",
         confirmButtonText: "Ok",
-      });
+      })
+        .then(() => {
+          setNewVeterinarian({
+            name: "",
+            specialty: "",
+            address: "",
+            phone: "",
+            email: "",
+            image: "",
+          })
+        })
     } catch (error) {
       console.error("Error al crear veterinario:", error);
       Swal.fire({
@@ -57,6 +60,12 @@ const NewVeterinarian = () => {
     }
   };
 
+  const HandleChange = (e) => {
+    setNewVeterinarian({
+      ...newVeterinarian,
+      [e.target.name]: e.target.value,
+    });
+  };
   const uploadImage = async (event) => {
     const files = event.target.files;
     const data = new FormData();
@@ -74,6 +83,10 @@ const NewVeterinarian = () => {
 
     const file = await res.json();
     setImage(file.secure_url);
+    setNewVeterinarian({
+      ...newVeterinarian,
+      image: file.secure_url,
+    });
     setLoading(false);
   };
 
@@ -94,8 +107,9 @@ const NewVeterinarian = () => {
         <input
           type="text"
           id="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          name="name"
+          value={newVeterinarian.name}
+          onChange={HandleChange}
           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           required
         />
@@ -110,8 +124,9 @@ const NewVeterinarian = () => {
         <input
           type="text"
           id="specialty"
-          value={specialty}
-          onChange={(e) => setSpecialty(e.target.value)}
+          name="specialty"
+          value={newVeterinarian.specialty}
+          onChange={HandleChange}
           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           required
         />
@@ -126,8 +141,9 @@ const NewVeterinarian = () => {
         <input
           type="text"
           id="address"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
+          name="address"
+          value={newVeterinarian.address}
+          onChange={HandleChange}
           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           required
         />
@@ -142,8 +158,9 @@ const NewVeterinarian = () => {
         <input
           type="tel"
           id="phone"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
+          name="phone"
+          value={newVeterinarian.phone}
+          onChange={HandleChange}
           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           required
         />
@@ -158,8 +175,9 @@ const NewVeterinarian = () => {
         <input
           type="email"
           id="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          name="email"
+          value={newVeterinarian.email}
+          onChange={HandleChange}
           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           required
         />
@@ -168,14 +186,14 @@ const NewVeterinarian = () => {
         <Label for="exampleFile">File</Label>
         <Input
           id="exampleFile"
-          name="file"
+          name="image"
           type="file"
           onChange={uploadImage}
         />
         {loading ? (
           <h3>Uploading Image...</h3>
         ) : (
-          <img src={image} style={{ width: "300px" }} />
+          <img src={newVeterinarian.image} style={{ width: "300px" }} />
         )}
         <FormText>Only *.jpeg and *.png images will be accepted</FormText>
       </FormGroup>
