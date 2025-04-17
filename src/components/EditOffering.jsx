@@ -6,29 +6,22 @@ import { FormGroup, FormText, Input, Label } from "reactstrap";
 import TimeSlots from "./TimeSlots";
 
 const EditOffering = () => {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
-  // const token = useSelector((store) => store.auth.token);
-
   const [services, setServices] = useState([]);
   const [selectedServiceId, setSelectedServiceId] = useState("");
-  const [selectedService, setSelectedService] = useState(null);
-  const [price, setPrice] = useState("");
-  const [active, setActive] = useState();
   const [timeSlots, setTimeSlots] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = useSelector((state) => state.auth.token);
-
-  const formData = {
+  
+  const [selectedService, setSelectedService] = useState({
     id: selectedServiceId,
-    name,
-    description,
-    price,
-    image,
-    active,
-    timeSlots,
-  };
+    name:"",
+    description:"",
+    price:"",
+    image:"",
+    active:"",
+    timeSlots:[],
+  });
   
   const fetchServices = async () => {
     try {
@@ -64,31 +57,30 @@ const EditOffering = () => {
       (service) => service.id === parseInt(selectedId)
     );
     setSelectedService(service);
-    setName(service.name);
-    setDescription(service.description);
-    setImage(service.image);
-    setPrice(service.price);
-    setActive(service.active);
     setTimeSlots(service.timeSlots);
   };
-
-  const handlePriceChange = (e) => {
-    e.preventDefault();
-    setPrice(parseFloat(e.target.value));
-  };
-  const handleNameChange = (e) => {
-    e.preventDefault();
-    setName(e.target.value);
+  
+  const HandleChange = (e) => {
+    setSelectedService({
+      ...selectedService,
+      [e.target.name]: e.target.value,
+    });
   };
 
-  // Manejar envío del formulario
+  useEffect(() => {
+        setSelectedService({
+          ...selectedService,
+          timeSlots: timeSlots,
+        });
+      }, [timeSlots]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const response = await axios.put(
         "http://localhost:8080/api-veterinary/offerings/update",
-        formData,
+        selectedService,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -101,7 +93,6 @@ const EditOffering = () => {
         icon: "success",
         confirmButtonText: "Ok",
       }).then(() => {
-        // window.location.reload();
         fetchServices();
       });
     } catch (error) {
@@ -131,6 +122,10 @@ const EditOffering = () => {
 
     const file = await res.json();
     setImage(file.secure_url);
+    selectedService({
+      ...selectedService,
+      image: file.secure_url
+    })
     setLoading(false);
   };
 
@@ -175,8 +170,8 @@ const EditOffering = () => {
           id="description"
           name="description"
           disabled={selectedServiceId == "" ? true : false}
-          value={formData.description}
-          onChange={(e) => setDescription(e.target.value)}
+          value={selectedService.description}
+          onChange={HandleChange}
           placeholder="Enter service description"
           rows="3"
           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -195,8 +190,8 @@ const EditOffering = () => {
           type="text"
           id="name"
           name="name"
-          value={formData.name}
-          onChange={handleNameChange}
+          value={selectedService.name}
+          onChange={HandleChange}
           placeholder="Enter service name"
           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           required
@@ -214,8 +209,8 @@ const EditOffering = () => {
           type="number"
           id="price"
           name="price"
-          value={formData.price}
-          onChange={handlePriceChange}
+          value={selectedService.price}
+          onChange={HandleChange}
           placeholder="Enter service price"
           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           required
@@ -233,16 +228,16 @@ const EditOffering = () => {
         {loading ? (
           <h3>Uploading Image...</h3>
         ) : (
-          <img src={image} style={{ width: "300px" }} />
+          <img src={selectedService.image} style={{ width: "300px" }} />
         )}
         <FormText>Only *.jpeg and *.png images will be accepted</FormText>
       </FormGroup>
       <input
         disabled={selectedServiceId == "" ? true : false}
         type="radio"
-        value={active}
-        checked={active}
-        onClick={() => setActive(!active)}
+        value={selectedService.active}
+        checked={selectedService.active}
+        onClick={() => setSelectedService({ ...selectedService, active: !selectedService.active })}
         name="active"
         id="active"
       />

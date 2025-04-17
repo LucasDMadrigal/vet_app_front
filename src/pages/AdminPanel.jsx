@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import AuthLayout from "../layout/AuthLayout";
-import NewServiceForm from "../components/NewServiceForm";
+import NewOffering from "../components/NewOffering";
 import EditOffering from "../components/EditOffering";
 import NewVeterinarian from "../components/NewVeterinarian";
 import EditVeterinarian from "../components/EditVeterinarian";
@@ -104,7 +104,7 @@ const AdminPanel = () => {
             <section className="w-full">
               {formSelected === "createVet" && <NewVeterinarian />}
               {formSelected === "editVet" && <EditVeterinarian />}
-              {formSelected === "createServ" && <NewServiceForm />}
+              {formSelected === "createServ" && <NewOffering />}
               {formSelected === "editServ" && <EditOffering />}
             </section>
           </div>
