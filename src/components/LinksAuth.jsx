@@ -7,7 +7,7 @@ import { logout } from "../redux/actions/authActions";
 const LinksAuth = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
-  const admin = useSelector((state) => state.auth.isAdmin);
+  const admin = useSelector((state) => state.auth.rol === "ROLE_ADMIN");
 
   const dispatch = useDispatch();
   const isActive = (linkToCheck) => {

@@ -26,7 +26,7 @@ const authReducer = createReducer(initialState, (builder) => {
         token: action.payload.token,
         loggedIn: action.payload.loggedIn,
         expiresIn: action.payload.expiresIn,
-        isAdmin: action.payload.isAdmin,
+        rol: action.payload.rol,
       };
       localStorage.setItem("auth", JSON.stringify(newState));
       return newState;

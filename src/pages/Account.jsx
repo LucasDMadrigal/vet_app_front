@@ -96,7 +96,7 @@ setLoading(true);
             <div className="mb-6">
               <h2 className="text-xl font-bold mb-2">Pets:</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {client.pets.map((pet, id) => (
+                {client?.pets?.map((pet, id) => (
                   <PetCard key={id} image={pet.imageUrl} petName={pet.petName} species={pet.specie} breed={pet.breed} petAge={pet.petAge} petSize={pet.animalSize} specialTreatment={pet.specialTreatment} />
                 ))}
               </div>

@@ -5,7 +5,7 @@ import { Route, Navigate } from 'react-router-dom';
 const RoutesAuthAdmin = (route) => {
 
   const loggedIn = useSelector((state) => state.auth.loggedIn);
-  const isAdmin = useSelector((state) => state.auth.isAdmin);
+  const isAdmin = useSelector((state) => state.auth.rol === "ROLE_ADMIN");
 
 //   console.log(loggedIn)
 //   console.log(isAdmin)

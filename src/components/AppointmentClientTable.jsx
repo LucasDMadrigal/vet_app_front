@@ -26,14 +26,14 @@ const AppointmentClientTable = ({ appointments, cancelAppointment }) => {
                     </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-[#FAE7D5]">
-                    {appointments.length === 0 ? (
+                    {appointments?.length === 0 ? (
                         <tr>
                             <td colSpan="4" className="py-4 px-6 text-center text-gray-500">
                                 No appointments available.
                             </td>
                         </tr>
                     ) : (
-                        appointments.map((appointment) => (
+                        appointments?.map((appointment) => (
                             <tr key={appointment.id}>
                                 <td className="py-2 px-4 sm:px-6 text-center">{new Date(appointment.dateTime).toLocaleDateString()}</td>
                                 <td className="py-2 px-4 sm:px-6 text-center">{new Date(appointment.dateTime).toLocaleTimeString()}</td>
