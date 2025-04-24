@@ -3,93 +3,79 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import { FormGroup, Label, Input, FormText } from "reactstrap";
-  
-  const EditVeterinarian = () => {
-    const [id, setId] = useState("");
-    const [name, setName] = useState("");
-    const [specialty, setSpecialty] = useState("");
-    const [address, setAddress] = useState("");
-    const [phone, setPhone] = useState("");
-    const [email, setEmail] = useState("");
-    const [active, setActive] = useState(true);
-    const [image, setImage] = useState("");
-    const [loading, setLoading] = useState(false);
-    const [veterinarians, setVeterinarians] = useState([]);
-    const [selectedVeterinarianId, setSelectedVeterinarianId] = useState('');
-    
-    const token = useSelector((state) => state.auth.token);
-    
-      useEffect(() => {
-          const fetchVeterinarians = async () => {
-    
-          try {
-    
-            const response = await axios.get('http://localhost:8080/api-veterinary/veterinarian/', {
-              headers: {
-                Authorization: `Bearer ${token}`
-              }
-            });
-    
-            setVeterinarians(response.data);
-    
-          } catch (error) {
-            console.error('Error al obtener la lista de veterinarios:', error);
+
+const EditVeterinarian = () => {
+  const [image, setImage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [veterinarians, setVeterinarians] = useState([]);
+  const [selectedVeterinarianId, setSelectedVeterinarianId] = useState("");
+  const [selectedVeterinarian, setSelectedVeterinarian] = useState({
+    id: "",
+    firstName: "",
+    lastName: "",
+    specialty: "",
+    address: "",
+    phone: "",
+    email: "",
+    image: "",
+    active: false,
+  });
+  const token = useSelector((state) => state.auth.token);
+
+  useEffect(() => {
+    const fetchVeterinarians = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8080/api-veterinary/veterinarian/",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
-        };
-    
-        fetchVeterinarians();
-      }, [token]);
+        );
 
-      const handleChange = (e) => {
-        setSelectedVeterinarianId(e.target.value);
-        console.log("🚀 ~ handleChange ~ e.target.value:", e.target.value)
-        
-      };
+        setVeterinarians(response.data);
+      } catch (error) {
+        console.error("Error al obtener la lista de veterinarios:", error);
+      }
+    };
 
-      useEffect(() => {
-        
-        const veterinarian = veterinarians.filter((v) => v.id == selectedVeterinarianId)[0];
-        if (veterinarian) {
-          console.log("🚀 ~ useEffect ~ veterinarian:", veterinarian)
-          setName(veterinarian.name);
-          setSpecialty(veterinarian.specialty);
-          setAddress(veterinarian.address);
-          setPhone(veterinarian.phone);
-          setEmail(veterinarian.email);
-          setImage(veterinarian.image);
-          setActive(veterinarian.active);
-          setId(veterinarian.id);
-        }
-        console.log("🚀 ~ EditVeterinarian ~ veterinarians:", veterinarians)
+    fetchVeterinarians();
+  }, [token]);
 
-      }, [selectedVeterinarianId, veterinarians]);
+  const handleSelectedVeterinarianChange = (e) => {
+    setSelectedVeterinarianId(e.target.value);
+  };
+
+  useEffect(() => {
+    const veterinarian = veterinarians.filter(
+      (v) => v.id == selectedVeterinarianId
+    )[0];
+    if (veterinarian) {
+      console.log("🚀 ~ useEffect ~ veterinarian:", veterinarian);
+      setSelectedVeterinarian(veterinarian);
+    }
+    console.log("🚀 ~ EditVeterinarian ~ veterinarians:", veterinarians);
+  }, [selectedVeterinarianId, veterinarians]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const veterinarianData = {
-      id,
-      name,
-      specialty,
-      address,
-      phone,
-      email,
-      image,
-      active
-    };
-
     try {
-      console.log(veterinarianData);
       const response = await axios.put(
         "http://localhost:8080/api-veterinary/veterinarian/update",
-        veterinarianData,
+        selectedVeterinarian,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      console.log("🚀 ~ handleSubmit ~ veterinarianData:", veterinarianData)
-      console.log("🚀 ~ handleSubmit ~ token:", token)
+      console.log(
+        "🚀 ~ handleSubmit ~ veterinarianData:",
+        selectedVeterinarian
+      );
+      console.log("🚀 ~ handleSubmit ~ token:", token);
 
       console.log("Veterinario creado con éxito:", response.data);
       Swal.fire({
@@ -129,6 +115,13 @@ import { FormGroup, Label, Input, FormText } from "reactstrap";
     setLoading(false);
   };
 
+  const handleChange = (e) => {
+    setSelectedVeterinarian({
+      ...selectedVeterinarian,
+      [e.target.id]: e.target.value,
+    });
+  };
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -137,21 +130,66 @@ import { FormGroup, Label, Input, FormText } from "reactstrap";
       <h3 className="text-lg font-bold mb-4">Edit Veterinarian</h3>
 
       <div>
-         <label htmlFor="veterinarian" className="block text-sm font-medium text-gray-700">Select a veterinarian:</label>
-         <select
-           id="veterinarian"
-           value={selectedVeterinarianId}
-           onChange={handleChange}
-           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-         >
-           <option selected disabled value="">Select a veterinarian</option>
-           {veterinarians.map(vet => (
-             <option key={vet.id} value={vet.id}>
-               {vet.name}
-             </option>
-           ))}
-         </select>
-       </div>
+        <label
+          htmlFor="veterinarian"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Select a veterinarian:
+        </label>
+        <select
+          id="veterinarian"
+          name="veterinarian"
+          value={selectedVeterinarianId}
+          onChange={handleSelectedVeterinarianChange}
+          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        >
+          <option selected disabled value="">
+            Select a veterinarian
+          </option>
+          {veterinarians.map((vet) => (
+            <option key={vet.id} value={vet.id}>
+              {vet.firstName} {vet.lastName}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <label
+          htmlFor="firstName"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Nombre:
+        </label>
+        <input
+          disabled={selectedVeterinarian.id === "" ? true : false}
+          type="text"
+          id="firstName"
+          name="firstName"
+          value={selectedVeterinarian.firstName}
+          onChange={handleChange}
+          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          required
+        />
+      </div>
+      <div>
+        <label
+          htmlFor="lastName"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Apellido:
+        </label>
+        <input
+          type="text"
+          id="lastName"
+          name="lastName"
+          disabled={selectedVeterinarian.id === "" ? true : false}
+          value={selectedVeterinarian.lastName}
+          onChange={handleChange}
+          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          required
+        />
+      </div>
       <div className="mt-4">
         <label
           htmlFor="specialty"
@@ -162,8 +200,10 @@ import { FormGroup, Label, Input, FormText } from "reactstrap";
         <input
           type="text"
           id="specialty"
-          value={specialty}
-          onChange={(e) => setSpecialty(e.target.value)}
+          name="specialty"
+          disabled={selectedVeterinarian.id === "" ? true : false}
+          value={selectedVeterinarian.specialty}
+          onChange={handleChange}
           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           required
         />
@@ -178,8 +218,10 @@ import { FormGroup, Label, Input, FormText } from "reactstrap";
         <input
           type="text"
           id="address"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
+          name="address"
+          disabled={selectedVeterinarian.id === "" ? true : false}
+          value={selectedVeterinarian.address}
+          onChange={handleChange}
           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           required
         />
@@ -194,8 +236,10 @@ import { FormGroup, Label, Input, FormText } from "reactstrap";
         <input
           type="tel"
           id="phone"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
+          name="phone"
+          disabled={selectedVeterinarian.id === "" ? true : false}
+          value={selectedVeterinarian.phone}
+          onChange={handleChange}
           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           required
         />
@@ -210,8 +254,10 @@ import { FormGroup, Label, Input, FormText } from "reactstrap";
         <input
           type="email"
           id="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          name="email"
+          disabled={selectedVeterinarian.id === "" ? true : false}
+          value={selectedVeterinarian.email}
+          onChange={handleChange}
           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           required
         />
@@ -227,11 +273,19 @@ import { FormGroup, Label, Input, FormText } from "reactstrap";
         {loading ? (
           <h3>Uploading Image...</h3>
         ) : (
-          <img src={image} style={{ width: "300px" }} />
+          <img src={selectedVeterinarian.image} style={{ width: "300px" }} />
         )}
         <FormText>Only *.jpeg and *.png images will be accepted</FormText>
       </FormGroup>
-      <input type="radio" value={active} checked={active} onClick={() => setActive(!active)} name="active" id="active"/>
+      <input
+        type="radio"
+        disabled={selectedVeterinarian.id === "" ? true : false}
+        value={selectedVeterinarian.active}
+        checked={selectedVeterinarian.active}
+        onClick={handleChange}
+        name="active"
+        id="active"
+      />
       <label htmlFor="active">Activo</label>
       <div className="flex justify-end">
         <button

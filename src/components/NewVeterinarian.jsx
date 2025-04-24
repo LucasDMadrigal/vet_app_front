@@ -9,7 +9,8 @@ const NewVeterinarian = () => {
   const [loading, setLoading] = useState(false);
 
   const [newVeterinarian, setNewVeterinarian] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     specialty: "",
     address: "",
     phone: "",
@@ -38,17 +39,17 @@ const NewVeterinarian = () => {
         text: "Veterinario creado con exito",
         icon: "success",
         confirmButtonText: "Ok",
-      })
-        .then(() => {
-          setNewVeterinarian({
-            name: "",
-            specialty: "",
-            address: "",
-            phone: "",
-            email: "",
-            image: "",
-          })
-        })
+      }).then(() => {
+        setNewVeterinarian({
+          firstName: "",
+          lastName: "",
+          specialty: "",
+          address: "",
+          phone: "",
+          email: "",
+          image: "",
+        });
+      });
     } catch (error) {
       console.error("Error al crear veterinario:", error);
       Swal.fire({
@@ -99,16 +100,33 @@ const NewVeterinarian = () => {
 
       <div>
         <label
-          htmlFor="name"
+          htmlFor="lastName"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Apellido:
+        </label>
+        <input
+          type="text"
+          id="lastName"
+          name="lastName"
+          value={newVeterinarian.lastName}
+          onChange={HandleChange}
+          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          required
+        />
+      </div>
+      <div>
+        <label
+          htmlFor="firstName"
           className="block text-sm font-medium text-gray-700"
         >
           Nombre:
         </label>
         <input
           type="text"
-          id="name"
-          name="name"
-          value={newVeterinarian.name}
+          id="firstName"
+          name="firstName"
+          value={newVeterinarian.firstName}
           onChange={HandleChange}
           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           required
