@@ -1,22 +1,10 @@
 import React from "react";
 import "../styles/TimeSlots.css";
-
+import { daysOfWeek, hours } from "../utils/DaysAndHours.js";
 const TimeSlots = ({disabledSlots, timeSlots, setSelectedTimeSlots }) => {
-  const daysOfWeek = [
-    "SUNDAY",
-    "MONDAY",
-    "TUESDAY",
-    "WEDNESDAY",
-    "THURSDAY",
-    "FRIDAY",
-    "SATURDAY",
-  ];
+
 
   const generateSlots = (day) => {
-    const hours = [
-      "08:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM",
-      "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM", "05:00 PM", "06:00 PM",
-    ];
     return hours.map((hour) => ({ day, hour }));
   };
 

@@ -68,7 +68,7 @@ const MainLogin = () => {
       const token = response.data;
       const decodedToken = parseJwt(token);
 
-      const responseCurrentClient = await axios.get(
+      const responseCurrentUser = await axios.get(
         "http://localhost:8080/api-veterinary/current",
         {
           headers: {
@@ -77,16 +77,16 @@ const MainLogin = () => {
         }
       );
 
-      const client = responseCurrentClient.data;
+      const logedUser = responseCurrentUser.data;
       
-      client.token = token;
-      client.rol = decodedToken.rol;
-      console.log("🚀 ~ handleLogin ~ client:", client)
+      logedUser.token = token;
+      logedUser.rol = decodedToken.rol;
+      console.log("🚀 ~ handleLogin ~ logedUser:", logedUser)
 
       // Guardar usuario en Redux
-      dispatch(login(client));
+      dispatch(login(logedUser));
 
-      if (client.rol == "ROLE_ADMIN") {
+      if (logedUser.rol == "ROLE_ADMIN") {
         navigate("/auth/admin");
       } else {
         navigate("/auth/account");

@@ -7,12 +7,16 @@ import { useSelector } from 'react-redux';
 import { format, parseISO } from 'date-fns';
 import { toZonedTime, format as formatTz } from 'date-fns-tz';
 
+import moment from 'moment';
+import SlotsAvailableToClient from './SlotsAvailableToClient';
+
 const AppointmentTable = ({ setSelectedAppointment, serviceId, serviceName, pets, handlePetChange }) => {
   const [dateTimeModal, setDateTimeModal] = useState('');
   const [dateTime, setDateTime] = useState('');
   const [description, setDescription] = useState('');
   const [selectedPetId, setSelectedPetId] = useState('');
   const [availableSlots, setAvailableSlots] = useState([]);
+  const [selectedService, setSelectedService] = useState('');
   const [selectedSlotId, setSelectedSlotId] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
   const [filteredSlots, setFilteredSlots] = useState([]);
@@ -22,15 +26,15 @@ const AppointmentTable = ({ setSelectedAppointment, serviceId, serviceName, pets
     handleFetchAvailableSlots(serviceId);
   }, [serviceId]);
 
-  
   const handleFetchAvailableSlots = async (serviceId) => {
     try {
       const response = await axios.get(`http://localhost:8080/api-veterinary/offerings/${serviceId}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
-      });
-      setAvailableSlots(response.data.availableSlots);
+      })
+      setSelectedService(response.data);
+      setAvailableSlots(response.data.timeSlots);
     } catch (error) {
       console.log(error);
     }
@@ -138,12 +142,6 @@ const AppointmentTable = ({ setSelectedAppointment, serviceId, serviceName, pets
     });
   };
 
-  // const formatDate = (dateString) => {
-  //   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' };
-  //   return new Date(dateString).toLocaleDateString('en-US', options);
-  // };
-
-
 
   const DateComponent = (fechaAFormatear) => {
     // Definir la fecha y hora en la zona horaria de Argentina
@@ -159,32 +157,32 @@ const AppointmentTable = ({ setSelectedAppointment, serviceId, serviceName, pets
     return isoStringArgentina
   };
 
+  // const formatTime = (dateString) => {
+  //   const options = { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'America/Argentina/Buenos_Aires' };
+  //   return new Date(dateString).toLocaleTimeString('en-US', options);
+  // };
 
-  const formatTime = (dateString) => {
-    const options = { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'America/Argentina/Buenos_Aires' };
-    return new Date(dateString).toLocaleTimeString('en-US', options);
-  };
+//   const selectDate = availableSlots.map(slot => {
+//     return {
+//       id:slot.id,
+//         day: slot.day,
+//         date: slot.date
+//     };
+// }).sort((a, b) => new Date(a.date) - new Date(b.date));
 
-  const selectDate = availableSlots.map(slot => {
-    return {
-      id:slot.id,
-        day: slot.day,
-        date: slot.date
-    };
-}).sort((a, b) => new Date(a.date) - new Date(b.date));
-
-  const uniqueDates = [...selectDate.reduce((map, slot) => map.set(slot.date, slot), new Map()).values()];
+  // const uniqueDates = [...selectDate.reduce((map, slot) => map.set(slot.date, slot), new Map()).values()];
   
   const handleChangeSelectDate = ({target}) => {
-  setSelectedDate(target.value)
-  const filtered = availableSlots
-    .filter(slot => slot.date === target.value)
-    .sort((a, b) => a.availableHours.localeCompare(b.availableHours));
-  setFilteredSlots(filtered)
+  console.log("🚀 ~ handleChangeSelectDate ~ target:", target)
+  // setSelectedDate(target.value)
+  // const filtered = availableSlots
+  //   .filter(slot => slot.date === target.value)
+  //   .sort((a, b) => a.availableHours.localeCompare(b.availableHours));
+  // setFilteredSlots(filtered)
 }
 
 return (
-    <Box as="form" onSubmit={(e) => e.preventDefault()} p={4} maxWidth="600px" mx="auto" borderWidth="1px" borderRadius="lg" overflow="hidden">
+    <Box as="form" onSubmit={(e) => e.preventDefault()} p={4} maxWidth="600px" mx="auto" borderWidth="1px" borderRadius="lg" overflow="unset">
       <FormControl id="petSelect" mb={4}>
         <FormLabel>Select Pet</FormLabel>
         <Select value={selectedPetId} onChange={(e) => {
@@ -208,51 +206,9 @@ return (
       </FormControl>
       <FormControl id="dateSelect" mb={4}>
         <FormLabel>Select Date</FormLabel>
-        <Select value={selectedDate} onChange={handleChangeSelectDate} required>
-          <option value="" disabled>Select a date</option>
-          {uniqueDates.map((date, index) => (
-            <option key={index} value={date.date}>{`${date.day}, ${date.date}`}</option>
-          ))}
-        </Select>
-      </FormControl>
-      <Flex justifyContent="space-between" mb={4}>
-        <Flex alignItems="center">
-          <Circle size="10px" className="bg-[#8fb0ff]" mr={2} />
-          <Text className='mt-[12px]'>Available</Text>
-        </Flex>
-        <Flex alignItems="center">
-          <Circle size="10px" bg="gray" mr={2} />
-          <Text className='mt-[12px]'>Occupied</Text>
-        </Flex>
-        <Flex alignItems="center">
-          <Circle size="10px" bg="red" mr={2} />
-          <Text className='mt-[12px]'>Selected</Text>
-        </Flex>
-      </Flex>
-      <SimpleGrid columns={[3, null, 4]} spacing={2} mb={2}>
-        {filteredSlots.map(slot => (
-          <Box
-            key={slot.id}
-            onClick={() => handleSlotSelection(slot)}
-            className={
-              selectedSlotId === slot.id
-                ? 'bg-[#D32F2F]'
-                : slot.available
-                ? 'bg-[#6ca8e0]'
-                : 'bg-gray-700'
-            }
-            color="white"
-            p={1}
-            borderRadius="md"
-            textAlign="center"
-            cursor={slot.available ? 'pointer' : 'not-allowed'}
-            opacity={slot.available ? 1 : 0.6}
-            fontSize="xl"
-          >
-            <Text>{slot.availableHours}</Text>
-          </Box>
-        ))}
-      </SimpleGrid>
+       <SlotsAvailableToClient availableSlots={availableSlots} handleChangeSelectDate={handleChangeSelectDate}/>
+      </FormControl> 
+     
       <Button onClick={handleCreateAppointment} colorScheme="blue" mt={4} isDisabled={!dateTime}>
         Create Appointment
       </Button>
